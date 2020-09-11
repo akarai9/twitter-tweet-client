@@ -1,0 +1,75 @@
+<div class="container mt-4 mb-2">
+  <form [formGroup]="searchTweet" autocomplete="off">
+    <div class="row">
+      <div class="col-sm-8 col-md-8 col-lg-8 col-8 text-right form-group">
+        <div class="form-group">
+          <input type="text" class="form-control" (keyup)="onBlankInput()" id="name" formControlName="name" placeholder="Enter Twitter Handle"
+            required>
+        </div>
+      </div>
+      <div class="col-sm-2 col-md-2 col-lg-2 col-2 text-right form-group">
+        <button type="submit" class="btn btn-primary form-control" (click)="searchTweetAPI(1,1)"
+          [disabled]="searchTweet.invalid">Search</button>
+      </div>
+      <div class="col-sm-2 col-md-2 col-lg-2 col-2 text-right form-group">
+        <a [routerLink]="'/feature/tweets-metric'" class="btn btn-primary form-control">Show Graph</a>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="container">
+  <div class="box-modal mb-3" infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollUpDistance]="2"
+    [infiniteScrollThrottle]="300" (scrolled)="onScroll()">
+    <div class="row mt-3" *ngFor="let data of tweetResponse" style="border-bottom: 1px solid #dedada;">
+      <div class="col-sm-1 col-md-1 col-lg-1 col-1" *ngIf="!data.retweeted_status">
+        <img class="img-class" src="{{data.user.profile_image_url}}" width="100%" height="auto">
+      </div>
+      <div class="col-sm-1 col-md-1 col-lg-1 col-1" *ngIf="data.retweeted_status">
+        <img class="img-class" src="{{data.retweeted_status.user.profile_image_url}}" width="100%" height="auto">
+      </div>
+      <div class="col-sm-11 col-md-11 col-lg-11 col-11 mb-4">
+        <div>
+          <span class="name-class" *ngIf="data.retweeted_status">{{data.retweeted_status.user.name}}</span>
+          <span class="name-class" *ngIf="!data.retweeted_status">{{data.user.name}}</span>
+          <img src="https://i.pinimg.com/originals/a4/0a/97/a40a97ae32d243ad12f3b5f1f14ade91.png" width="40px"> &nbsp;
+          <span *ngIf="data.retweeted_status">{{data.retweeted_status.created_at | date: 'medium'}}</span>
+          <span *ngIf="!data.retweeted_status">{{data.created_at | date: 'medium'}}</span> &nbsp;
+          <span *ngIf="data.retweeted_status">{{'Retweeted'}}</span>
+          <br>
+          <span *ngIf="data.retweeted_status">@{{data.retweeted_status.user.screen_name}}</span>
+          <span *ngIf="!data.retweeted_status">@{{data.user.screen_name}}</span>
+        </div>
+        <div class="mt-3 text-class">
+          <span *ngIf="data.retweeted_status">{{data.retweeted_status.text}}</span>
+          <span *ngIf="!data.retweeted_status">{{data.text}}</span>
+        </div>
+        <!-- <div class="text-center mt-3">
+                    <img src="https://pbs.twimg.com/profile_banners/1546101560/1597215626" width="100%">
+                </div> -->
+        <div class="row mt-3 pl-3">
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <img class="icons-class" src="assets/images/comment.png"> &nbsp; {{data.user.favourites_count}}
+          </div>
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <img class="icons-class" src="assets/images/retweet.png"> &nbsp; {{data.retweet_count}}
+          </div>
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <img class="icons-class" src="assets/images/heart.png"> &nbsp;
+            <span *ngIf="data.retweeted_status">{{data.retweeted_status.favorite_count}}</span>
+            <span *ngIf="!data.retweeted_status">{{data.favorite_count}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3" *ngIf="tweetResponse.length == 0 && tweetSearch">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-12">
+        <h4 class="text-center">No results for "{{twitterSearchName}}"</h4>
+      </div>
+    </div>
+    <div class="row mt-3" *ngIf="tweetResponse.length == 0 && !tweetSearch">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-12">
+        <h4 class="text-center">No tweets found</h4>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="container mt-4 mb-2">
+    <form [formGroup]="getMetric" autocomplete="off">
+      <div class="row">
+        <div class="col-sm-8 col-md-8 col-lg-8 col-8 text-right form-group">
+          <div class="form-group">
+            <input type="text" class="form-control" (keyup)="onBlankInput()" id="name" formControlName="name"
+              placeholder="Enter Twitter Handle" required>
+          </div>
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2 col-2 text-right form-group">
+          <button type="submit" class="btn btn-primary form-control" (click)="searchTweetAPI(1,1)"
+            [disabled]="getMetric.invalid">Search</button>
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2 col-2 text-right form-group">
+          <a [routerLink]="'/feature/get-tweets'" class="btn btn-primary form-control">Show Tweets</a>
+        </div>
+      </div>
+    </form>
+</div>
+<div class="container mt-4 mb-2">
+  <canvas  baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+    [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType">
+  </canvas>
+</div>
